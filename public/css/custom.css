@@ -1,0 +1,117 @@
+
+body
+{
+    font-family: 'Montserrat', sans-serif!important;
+}
+.main-container
+{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.nav-bar
+{
+    width:inherit;
+    display:flex;
+    border-bottom: 1px rgb(231, 231, 231) solid;
+  
+}
+
+.nav-bar-left
+{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+
+}
+
+.content-area
+{
+    display:flex;
+    
+}
+
+.sidebar-menu
+{
+    width:20%;
+    border-right: 1px rgb(231, 231, 231) solid;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    background-color: rgb(243, 243, 243);
+}
+
+
+.menu-item
+{
+    padding:1rem;
+}
+
+.menu-item:hover
+{
+    cursor: pointer;
+}
+.sidebar-right
+{
+    width:80%;
+    padding:1rem;
+    display:flex;
+    flex-direction:column;
+}
+
+.button-area
+{
+    display:flex;
+    width:100%;
+}
+
+.option-button
+{
+    width:30%;
+    margin-right:1.5rem;
+    padding:1rem;
+    border-radius:1rem;
+    border:0px solid white;
+    font-family: 'Montserrat', sans-serif!important;
+    display:flex;
+}
+
+.button-youtube
+{
+    background-color: #ff0000;
+    color:white;
+
+}
+
+
+.button-facebook
+{
+    background-color: #4167b2;
+    color:white;
+
+}
+
+.button-twitch
+{
+    background-color: #6441a5;
+    color:white;
+
+}
+
+.button-logo
+{
+    color:white;
+    width:35px;
+    margin-right:0.7rem;
+}
+
+.button-text
+{
+    margin-top:0.5rem;
+    font-size: 1rem;
+}
+
+.option-button:hover
+{
+    cursor:pointer;
+}
