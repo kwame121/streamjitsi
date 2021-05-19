@@ -8,27 +8,59 @@ class Poc extends React.Component {
     this.state = {
       reloadControl: true,
       code: "",
-      appSecret: "e0a46a1c5b0ba49776c1cc02dede42eb",
+      appSecret: "e0a46a1c5b0ba49776c1cc02dede42eb", //this is hella unsafe i knowwwwwwwww this is for demonstration.....
       accessToken: "",
       userid: "",
+      testingFlag:'twitch',
+      clientId:'h0rfqdr3ilgi6v6d4tcws0wtzl6cml',
+      authorizationCodeTwitch:'',
+      authorizationTwitchResponse:{},
     };
   }
 
   componentDidMount() {
-    let url = new URL(window.location.href);
-    let queryValue = url.search;
-    if (queryValue !== "") {
+
+      let url = new URL(window.location.href);
+      let queryValue = url.search;
+      if (queryValue !== "") {
       let modifiedQuery = queryValue.substr(6);
-      this.setState({ ...this.state, code: modifiedQuery });
+      if(this.state.testingFlag!=='twitch'){
+        this.setState({ ...this.state, code: modifiedQuery });
+      }
+      else
+      {
+        this.setState({...this.state,authorizationCodeTwitch:modifiedQuery})
+      }
+
+}
+}
+
+  streamTwitch() {
+
+    window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
+    if (this.state.authorizationCodeTwitch ==="")
+    {
+
+    }
+
+    else
+    {
+      console.log('Twitch url',this.state.authorizationCodeTwitch);
+      axios.post(`https://id.twitch.tv/oauth2/token?client_id=${this.state.clientId}&client_secret=9iyv343znh91asivljziyqjlzmgyyw&code=${this.state.aucthorizationCodeTwitch}&grant_type=authorization_code&redirect_uri=http://localhost:3000/`)
+      .then((result)=>{
+        let data = result.data;
+        console.log('twitch response',data);
+        this.setState({...this.state,authorizationTwitchResponse:data});
+      })
+      .catch((error)=>{
+        console.log(error);})
+
     }
   }
 
-  streamTwitch() {}
-
   streamFacebook() {
     if (this.state.code === "") {
-      window.location.href =
-        "https://www.facebook.com/v10.0/dialog/oauth?client_id=560317711602380&redirect_uri=http://localhost:3000/";
+      window.location.href = "https://www.facebook.com/v10.0/dialog/oauth?client_id=560317711602380&redirect_uri=http://localhost:3000/";
     } else {
       axios
         .get(
@@ -106,7 +138,7 @@ class Poc extends React.Component {
                   <span>Youtube</span>
                 </div>
               </button>
-              <button className="option-button button-twitch">
+              <button className="option-button button-twitch" onClick={()=>{this.streamTwitch();}}>
                 <div>
                   <img className="button-logo" src="/images/twitch.svg"></img>
                 </div>
