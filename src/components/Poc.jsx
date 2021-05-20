@@ -68,7 +68,7 @@ class Poc extends React.Component {
 
   streamTwitch() {
     if (this.state.authorizationCodeTwitch === "") {
-      window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
+      window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
     } else {
       console.log("Twitch url", this.state.authorizationCodeTwitch);
       axios
@@ -83,7 +83,7 @@ class Poc extends React.Component {
           let config = {
             headers: {
               Authorization:
-                "Bearer " + this.state.authorizationTwitchResponse.access_token,
+                "Bearer " + this.state.oauthResponseData.access_token,
               "Client-Id": this.state.clientId,
               // Client-Id: this.state.clientId,
             },
@@ -93,8 +93,9 @@ class Poc extends React.Component {
             headers: {
               Accept: "application/vnd.twitchtv.v5+json",
               Authorization:
-                "OAuth " + this.state.authorizationTwitchResponse.access_token,
+                "OAuth " + this.state.oauthResponseData.access_token,
               "Client-ID": this.state.clientId,
+
               // Client-Id: this.state.clientId,
             },
           };
@@ -102,11 +103,12 @@ class Poc extends React.Component {
           axios
             .get("https://api.twitch.tv/kraken/user", configUserData)
             .then((response) => {
-              let data = response;
+              let data = response.data;
               this.setState({ ...this.state, userObjectTwitch: data });
+              console.log(this.state.userObjectTwitch);
               axios
                 .get(
-                  `https://api.twitch.tv/helix/streams/key/broadcaster_id?${this.state.userObjectTwitch.id}`,
+                  `https://api.twitch.tv/helix/streams/key?broadcaster_id=${this.state.userObjectTwitch._id}`,
                   config
                 )
                 .then((response) => {
