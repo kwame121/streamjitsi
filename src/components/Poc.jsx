@@ -36,40 +36,44 @@ class Poc extends React.Component {
       {
         let url = new URL(window.location.href);
         let hash = url.hash;
-        let parameterArray = hash.split('&');
-        if (parameterArray.length !== 0)
+        if (hash!=='')
         {
-          console.log(parameterArray);
+          let parameterArray = hash.split('&');
+          if (parameterArray.length !== 0)
+          {
+            console.log(parameterArray);
+  
+            let access_token = parameterArray[0].split('=');
+            let id_token = parameterArray[1].split('=');
+            let scope = parameterArray[2].split('=');
+            let state = parameterArray[3].split('=');
+            let token_type = parameterArray[4].split('=');
+    
+            access_token = access_token[1];
+            id_token = id_token[1];
+            scope = scope[1];
+            state  = state[1];
+            token_type = token_type[1];
+    
+            let finalParameterObject = {};
+            finalParameterObject['access_token'] = access_token;
+            finalParameterObject['id_token'] = id_token;
+            finalParameterObject['scope'] = scope;
+            finalParameterObject['state'] = state;
+            finalParameterObject['token_type'] = token_type;
+    
+            console.log(finalParameterObject);
+            this.setState({...this.state,oauthResponseData:finalParameterObject,authorizationCodeTwitch:finalParameterObject.access_token});
+          }
 
-          let access_token = parameterArray[0].split('=');
-          let id_token = parameterArray[1].split('=');
-          let scope = parameterArray[2].split('=');
-          let state = parameterArray[3].split('=');
-          let token_type = parameterArray[4].split('=');
-  
-          access_token = access_token[1];
-          id_token = id_token[1];
-          scope = scope[1];
-          state  = state[1];
-          token_type = token_type[1];
-  
-          let finalParameterObject = {};
-          finalParameterObject['access_token'] = access_token;
-          finalParameterObject['id_token'] = id_token;
-          finalParameterObject['scope'] = scope;
-          finalParameterObject['state'] = state;
-          finalParameterObject['token_type'] = token_type;
-  
-          console.log(finalParameterObject);
-          this.setState({...this.state,oauthResponseData:finalParameterObject,authorizationCodeTwitch:finalParameterObject.access_token});
         }
+
 
 }
 }
 
   streamTwitch() {
 
-    
     if (this.state.authorizationCodeTwitch ==="")
     {
       window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
@@ -83,6 +87,19 @@ class Poc extends React.Component {
         let data = result.data;
         console.log('twitch response',data);
         this.setState({...this.state,authorizationTwitchResponse:data});
+        
+        let config = {headers:{
+                      Authorization: 'Bearer' + this.state.authorizationCodeTwitch, 'Client-Id': this.state.clientId,
+                      // Client-Id: this.state.clientId,
+        }};
+
+        axios.get(' https://api.twitch.tv/helix/streams/key',config).then((response)=>
+        {
+          let data = response.data;
+          console.log(data);
+
+        }).catch((error)=>{console.log(error)})
+
       })
       .catch((error)=>{
         console.log(error);})
