@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import $ from "jquery";
+import Dialog from '@material-ui/core/Dialog';
 
 class Poc extends React.Component {
   constructor(props) {
@@ -18,7 +19,53 @@ class Poc extends React.Component {
       oauthResponseData: {},
       streamKeyTwitch: "",
       userObjectTwitch: {},
+      streamInformation:
+      {
+        "twitch":false,
+        "facebook":false,
+        "youtube":false,
+      },
+      streamInforationDialog:false,
     };
+  }
+
+
+  validateTwitchOauth() //this should be a promise
+  {
+
+
+    let oauthAccessToken = this.state.authorizationCodeTwitch;
+    let config = {
+      headers: 
+      {
+        Authorization: "OAuth "+oauthAccessToken,
+      }
+    }
+
+    return new Promise(function(resolve,reject)
+    {
+      
+    axios.post(`https://id.twitch.tv/oauth2/validate`,config).then((response)=>
+    {
+      let data = response.data;
+      // if ()
+      // {
+      //   resolve
+       
+      // }
+      // else
+      // {
+       
+      // }
+
+
+    }).catch((error)=>
+    {
+      console.log(error);
+    });
+
+    })
+
   }
 
   componentDidMount() {
@@ -30,7 +77,7 @@ class Poc extends React.Component {
         console.log(modifiedQuery);
         this.setState({ ...this.state, code: modifiedQuery });
       }
-    } else {
+    } else if (this.state.testingFlag==="twitch") { // url reading for data ...........
       let url = new URL(window.location.href);
       let hash = url.hash;
       if (hash !== "") {
@@ -71,62 +118,21 @@ class Poc extends React.Component {
       window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
     } else {
       console.log("Twitch url", this.state.authorizationCodeTwitch);
-      axios
-        .post(
-          `https://id.twitch.tv/oauth2/token?client_id=${this.state.clientId}&client_secret=9iyv343znh91asivljziyqjlzmgyyw&grant_type=client_credentials`
-        )
-        .then((result) => {
-          let data = result.data;
-          console.log("twitch response", data);
-          this.setState({ ...this.state, authorizationTwitchResponse: data });
+      let oauthResponseData = this.state.oauthResponseData;
+      let authorizationCodeTwitch = this.state.authorizationCodeTwitch;
 
-          let config = {
-            headers: {
-              Authorization:
-                "Bearer " + this.state.oauthResponseData.access_token,
-              "Client-Id": this.state.clientId,
-              // Client-Id: this.state.clientId,
-            },
-          };
+      axios.post('http://localhost:3001/twitch/stream_twitch',{oauthResponseData,authorizationCodeTwitch}).then((result)=>
+      {
+        let data = result.data;
+        console.log(data.data);
+        let streamKey = data.data[0].stream_key;
+        this.setState({...this.state,streamKeyTwitch:streamKey})
 
-          let configUserData = {
-            headers: {
-              Accept: "application/vnd.twitchtv.v5+json",
-              Authorization:
-                "OAuth " + this.state.oauthResponseData.access_token,
-              "Client-ID": this.state.clientId,
 
-              // Client-Id: this.state.clientId,
-            },
-          };
-
-          axios
-            .get("https://api.twitch.tv/kraken/user", configUserData)
-            .then((response) => {
-              let data = response.data;
-              this.setState({ ...this.state, userObjectTwitch: data });
-              console.log(this.state.userObjectTwitch);
-              axios
-                .get(
-                  `https://api.twitch.tv/helix/streams/key?broadcaster_id=${this.state.userObjectTwitch._id}`,
-                  config
-                )
-                .then((response) => {
-                  let data = response.data;
-                  console.log("GOT MY STREAM KEYYYYY", data);
-                  this.setState({ ...this.state, streamKeyTwitch: data });
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      }).catch((error)=>
+      {
+        console.log(error);
+      })
     }
   }
 
@@ -177,10 +183,38 @@ class Poc extends React.Component {
     }
   }
 
-  streamYoutuube() {}
+  streamYoutube() {
+    
+  }
 
   render() {
     return (
+      <>
+      <Dialog
+        PaperProps={{
+          style: {
+            minWidth: "50%",
+            padding: "2rem",
+          },
+        }}
+
+        open={this.state.streamInforationDialog}
+        onClose={()=>{this.setState({...this.state,streamInforationDialog:false})}}
+      >
+
+        <div className="stream-information-main"> 
+        <div className="stream-information-title">
+          Stream Preferences
+        </div>
+        <div className="stream-information-body">
+          <div className="stream-option-card">
+
+          </div>
+        </div>
+        </div>
+
+      </Dialog>
+
       <div className="main-container">
         <div className="nav-bar">
           <div className="nav-bar-left">
@@ -240,6 +274,7 @@ class Poc extends React.Component {
           </div>
         </div>
       </div>
+      </>
     );
   }
 }
