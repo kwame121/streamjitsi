@@ -228,6 +228,9 @@ class Poc extends React.Component {
             <div className="menu-item">
               <span>Destination</span>
             </div>
+            <div className="menu-item">
+              <span>Broadcasts</span>
+            </div>
           </div>
 
           <div className="sidebar-right">
