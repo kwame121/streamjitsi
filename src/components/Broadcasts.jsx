@@ -16,8 +16,6 @@ class Broadcasts extends React.Component {
     this.state = {
       tabValue: 0,
       isCreateModalVisible:false,
-
-
     };
     this.vanishModal = this.vanishModal.bind(this); 
   }

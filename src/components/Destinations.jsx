@@ -5,6 +5,8 @@ import Dialog from "@material-ui/core/Dialog";
 import Navbar from "../includes/navbar.jsx";
 import Sidebar from "../includes/sidebar.jsx";
 import { Breadcrumb } from 'antd';
+import CONSTANTS from "../utils/Constants.js";
+
 
 
 
@@ -25,19 +27,19 @@ class Destinations extends React.Component
 
     }
 
-    streamTwitch(){
+    addTwitch(){
 
-
+       window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${CONSTANTS.Twitch.clientId}&redirect_uri=http://localhost:3000/destinations/auth/twitch&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
     }
 
-    streamFacebook()
+    addFacebook()
     {
 
     }
 
-    streamYoutube()
+    addYoutube()
     {
-      
+      window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=${CONSTANTS.Youtube.clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdestinations%2Fauth%2Fyoutube&scope=https://www.googleapis.com/auth/youtube&response_type=token`;
     }
 
     render(){
@@ -62,7 +64,7 @@ class Destinations extends React.Component
                 </div>
     
                 <div className="button-area">
-                <button className="option-button button-youtube">
+                <button className="option-button button-youtube" onClick={()=>{this.addYoutube()}}>
                 <div>
                   <img className="button-logo" src="/images/youtube.svg"></img>
                 </div>
@@ -74,7 +76,7 @@ class Destinations extends React.Component
               <button
                 className="option-button button-twitch"
                 onClick={() => {
-                  this.streamTwitch();
+                  this.addTwitch();
                 }}
               >
                 <div>
@@ -88,7 +90,7 @@ class Destinations extends React.Component
               <button
                 className="option-button button-facebook"
                 onClick={() => {
-                  this.streamFacebook();
+                  this.addFacebook();
                 }}
               >
                 <div>

@@ -213,6 +213,12 @@ button:hover
 }
 
 
+.auth-loader
+{
+    width:100%;
+    text-align:center;
+}
+
 
 
 

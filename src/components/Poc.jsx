@@ -115,7 +115,7 @@ class Poc extends React.Component {
 
   streamTwitch() {
     if (this.state.authorizationCodeTwitch === "") {
-      window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
+      window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${this.state.clientId}&redirect_uri=http://localhost:3000/poc&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
     } else {
       console.log("Twitch url", this.state.authorizationCodeTwitch);
       let oauthResponseData = this.state.oauthResponseData;
