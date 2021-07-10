@@ -32,7 +32,8 @@ class StreamAuth extends React.Component {
           localStorage.setItem('twitch_streamData',JSON.stringify(result[0]));  
         }).catch((error)=>
         {
-          console.log('an error occured', error)
+          console.log('an error occured', error);
+
         });
         break;
       

@@ -6,6 +6,8 @@ import Navbar from "../includes/navbar.jsx";
 import Sidebar from "../includes/sidebar.jsx";
 import { Breadcrumb } from 'antd';
 import CONSTANTS from "../utils/Constants.js";
+import { nanoid } from "nanoid";
+
 
 
 
@@ -25,6 +27,7 @@ class Destinations extends React.Component
     componentDidMount()
     {
 
+      
     }
 
     addTwitch(){
@@ -34,12 +37,17 @@ class Destinations extends React.Component
 
     addFacebook()
     {
-
+      
     }
 
     addYoutube()
     {
-      window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=${CONSTANTS.Youtube.clientId}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fdestinations%2Fauth%2Fyoutube&scope=https://www.googleapis.com/auth/youtube&response_type=token`;
+      axios.post('http://localhost:3001/youtube/get_auth_url',).then((result)=>
+      {
+      window.location.href = result.data.url;
+      }).catch((error)=>{console.log(error)});
+      
+    
     }
 
     render(){

@@ -31,6 +31,11 @@ class Createbroadcast extends React.Component {
     
   }
 
+  componentDidMount()
+  {
+    
+  }
+
   //pass through some auth data and whatnot to validate shit...
 
   render() {
@@ -53,6 +58,8 @@ class Createbroadcast extends React.Component {
                 <i class="fas fa-plus"></i>
               </button>
             </Dropdown>
+
+            
           </p>
         </Modal>
       </>
