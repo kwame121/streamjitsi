@@ -40,14 +40,17 @@ class Destinations extends React.Component
       
     }
 
-    addYoutube()
+    async addYoutube()
     {
-      axios.post('http://localhost:3001/youtube/get_auth_url',).then((result)=>
+      try
       {
-      window.location.href = result.data.url;
-      }).catch((error)=>{console.log(error)});
-      
-    
+        let result = await axios.post('http://localhost:3001/youtube/get_auth_url',);
+        window.location.href = result.data.url;
+      }
+      catch(e)
+      {
+        console.log(e.response);
+      }    
     }
 
     render(){

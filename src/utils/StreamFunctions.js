@@ -28,6 +28,8 @@ function validateYoutube(youtubeObject) {
 
 function validateFacebook() {}
 
+
+
 export function streamTwitch(url) {
   let hash = url.hash;
   let twitchObject = {};
@@ -59,7 +61,7 @@ export function streamTwitch(url) {
 
 export function streamFacebook(url) {}
 
-export function streamYoutube(url) {
+export async function streamYoutube(url) {
   let query = url.search;
   let params = query.split("&");
   let authData = {};
@@ -68,20 +70,43 @@ export function streamYoutube(url) {
     name = name.replace(/[&?#]/g, "");
     authData[name] = value;
   });
-  try {
-    axios
-      .post("http://localhost:3001/youtube/get_access_token", { authData })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error)
-      });
-  } catch (e) {
-    console.log('exception found',e);
+
+  try
+  {
+    let result = await axios.post("http://localhost:3001/youtube/get_access_token", { authData });
+    let {status,tokens,error,access_token} = result.data;
+    if (status==='500')
+    {
+      console.error('Some kind of error occured',error);
+    }
+    else
+    {
+      console.dir('tokens',tokens);
+      if (tokens!==null)
+      {
+        localStorage.setItem('youtube_oauth',JSON.stringify(tokens));
+        try
+        {
+          let result = await axios.post('http://localhost:3001/youtube/get_user_data',{tokens:tokens});
+          let {data} = result.data.user_data;
+          localStorage.setItem('youtube_userData',JSON.stringify(data));
+          console.log('IT IS FINISHEDDDDD....');
+          window.location.href= 'http://localhost:3000/broadcasts';
+          // alert('destination added....');
+        }
+        catch(e)
+        {
+          console.log('failed to get user data...',e);
+        }   
+      }
+    }
+
   }
 
-
+  catch(e)
+  {
+    console.error('Error detected',e.response);
+  }
 }
 
 // export function streamYoutube(url)
