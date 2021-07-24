@@ -5,6 +5,8 @@ import Dialog from "@material-ui/core/Dialog";
 import Navbar from "../includes/navbar.jsx";
 import Sidebar from "../includes/sidebar.jsx";
 import { Tabs } from 'antd';
+import { Utils } from "../utils/Utils.js";
+import DestinationCard from "./DestinationCard.js";
 
 const { TabPane } = Tabs;
 
@@ -12,13 +14,15 @@ const { TabPane } = Tabs;
 class PocRebuild extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      destinationArray:[],
+    };
   }
 
   componentDidMount() 
   {
-    
-
+    let destination_array = Utils.get_destinations();
+    this.setState({ ...this.state, destinationArray: destination_array });
   }
 
   render() {
@@ -35,9 +39,16 @@ class PocRebuild extends React.Component {
              
             </div>
 
-            {/* <div className="button-area">
-                <button className="add-destination"><span style={{marginRight:'0.2rem'}}>Add a Destination</span> <i class="fas fa-plus-circle"></i></button>
-            </div> */}
+            <div className="available-destinations">
+              {this.state.destinationArray.map((destination,index)=>
+              {
+                return(
+                  <DestinationCard destination={destination}/>
+                )
+
+              })}
+
+            </div>
           </div>
         </div>
       </div>

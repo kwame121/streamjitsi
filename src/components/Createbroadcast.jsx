@@ -17,7 +17,12 @@ class Createbroadcast extends React.Component {
     this.state = {
       destinationArray: [],
       selectedDestinations: [],
+      broadcastForm:{
+        eventName_text:'',
+        jitsiUrl_url:'',
+      },
     };
+
   }
 
   addTwitch() { //duplicate code... fix this...
@@ -41,6 +46,33 @@ class Createbroadcast extends React.Component {
     let destination_array = Utils.get_destinations();
     this.setState({ ...this.state, destinationArray: destination_array });
   }
+
+  editBroadcastForm(e,target){
+    let value = e.target.value;
+    let formObject  = this.state.broadcastForm;
+    formObject[target] = value;
+    this.setState({...this.state,broadcastForm:formObject});
+  }
+
+  createBroadcast()
+  {
+    let formObject = this.state.broadcastForm;
+    let {valid,error_array} = Utils.validate_form(formObject);
+    console.log(valid);
+    if (!valid)
+    {
+      alert(error_array);
+    }
+    else
+    {
+      //push formData into local_storage...
+      alert('Valid Inputss');
+      this.props.onOk();
+
+    }
+  }
+
+
 
   //pass through some auth data and whatnot to validate shit...
 
@@ -90,7 +122,7 @@ class Createbroadcast extends React.Component {
               return (
                 <div>
                   <button
-                    className="add_broadcast_btn"
+                    className="add_broadcast_btn no-opacity"
                     style={{ backgroundColor: "black" }}
                   >
                     <img
@@ -105,7 +137,15 @@ class Createbroadcast extends React.Component {
 
           <div className="modal-input-row">
             <label>Event Name</label><br></br>
-            <input type="text" className="modal-input-field"></input>
+            <input type="text" className="modal-input-field" onChange={(e)=>{this.editBroadcastForm(e,'eventName_text')}}></input>
+          </div>
+          <div className="modal-input-row">
+            <label>Jitsi URL</label><br></br>
+            <input type="text" className="modal-input-field" onChange={(e)=>{this.editBroadcastForm(e,'jitsiUrl_url')}}></input>
+          </div>
+
+          <div className="modal-input-row">
+            <button className="create-event-button" onClick={()=>{this.createBroadcast()}}>Create Event</button>
           </div>
 
         </div>

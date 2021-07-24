@@ -222,7 +222,9 @@ button:hover
 .button-area-create-modal
 {
     display:flex;
-    flex-direction:horizontal;
+    flex-direction:row;
+    margin-bottom:1.5rem;
+
 }
 
 .modal-area-broadcast
@@ -243,8 +245,66 @@ button:hover
     background: #dedede;
     border-radius: 0.2rem;
     padding: 0.4rem;
+    margin-bottom:0.8rem;
 }
 
+.create-event-button
+{
+    background-color: #000000;
+    color:white;
+    border-radius:0.4rem;
+    padding:1rem;
+    border:0px;
+    width:100%;
+}
+
+.no-opacity
+{
+    opacity:unset!important;
+}
+
+
+.available-destinations
+{
+    width:50%;
+    display:flex;
+    flex-direction:column;
+}
+
+.destination-card
+{
+    width: 100%;
+    display: flex;
+    padding: 0.8rem;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dadada;
+    margin-bottom: 1rem;
+}
+
+.destination-card-left
+{
+    display:flex;
+}
+
+.destination-card-left-text
+{
+    display:flex;
+    flex-direction:column;
+}
+
+.destination-card-right
+{
+    order:2;
+    margin-left:auto;
+}
+
+.destination-image
+{
+    width:40px;
+    border-radius:50%;
+    margin-right:0.5rem;
+
+}
 
 
 
