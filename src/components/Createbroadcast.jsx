@@ -7,6 +7,10 @@ import MenuItems from "./MenuItems.jsx";
 import { Utils } from "../utils/Utils.js";
 import CONSTANTS from "../utils/Constants.js";
 
+
+
+//david..... i finished up the form, so dont stress to much about that...  
+
 class Createbroadcast extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +29,7 @@ class Createbroadcast extends React.Component {
 
   }
 
-  addTwitch() { //duplicate code... fix this...
+  addTwitch() {
     window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${CONSTANTS.Twitch.clientId}&redirect_uri=http://localhost:3000/destinations/auth/twitch&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
   }
 
@@ -65,7 +69,11 @@ class Createbroadcast extends React.Component {
     }
     else
     {
-      //push formData into local_storage...
+      //push formObject into local_storage... david do that here... so broadcasts should be an array, so just push the new validated broadcast
+      //object
+      // into the array, and set it back to local_storage and that should work
+      //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
+      // so change that... its not the best lol
       alert('Valid Inputss');
       this.props.onOk();
 
