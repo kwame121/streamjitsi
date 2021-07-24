@@ -87,9 +87,9 @@ class Utils
 
     static validate_text(text)
     {
-        let is_valid = typeof(text)==="string";
+        let is_valid = typeof(text)==="string"&&text!=='';
         console.log(is_valid);
-        return ({is_valid, error:'Invalid input, please use strings only'});
+        return ({is_valid, error:'Invalid input, please use strings only,field should not be empty'});
     }
 
     static validate_url(string)
@@ -112,7 +112,6 @@ class Utils
     static get_type_callback(target)
     {
       let type = target.split('_')[1];
-      console.log(type);
       let callback = null;
       if (type==='number')
       {
@@ -145,6 +144,7 @@ class Utils
             {
                 error_array.push(error);
                 valid=false;
+                return{valid,error_array};
             }
 
         }
