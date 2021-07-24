@@ -40,6 +40,9 @@ class Utils
         }
     }
 
+
+    //write a function to get all the broadcasts as an array from local storage and return them...
+
     static get_destinations()
     {
         try

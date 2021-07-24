@@ -10,6 +10,10 @@ import Createbroadcast from "./Createbroadcast.jsx";
 
 const { TabPane } = Tabs;
 
+
+//write code to iterate through the broadcasts array, using the function you created in the Utils file....
+// display it in some kind of ui view.. use the code i wrote in the PocRebuilt.jsx as a reference....
+//also, display a view if there are no available broadcasts, do same for the destinations in the PocRebuilt.jsx file...
 class Broadcasts extends React.Component {
   constructor(props) {
     super(props);
