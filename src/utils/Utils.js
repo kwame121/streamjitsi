@@ -41,7 +41,10 @@ class Utils
     }
 
 
-    //write a function to get all the broadcasts as an array from local storage and return them...
+    //d-hacks..... write a function to get all the broadcasts as an array from local storage and return them...
+    //use the get_destinations as a reference i guess, although its slightly different... work with David to do that, since david will 
+    //be writing the code to insert the broadcasts into local storage...
+    //
 
     static get_destinations()
     {
