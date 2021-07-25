@@ -75,8 +75,8 @@ class Createbroadcast extends React.Component {
       //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
       // so change that... its not the best lol
 
-      localStorage.setItem('validated form', valid);
-      formObject = localStorage.valid;
+      localStorage.setItem('form object', formObject);
+      formObject = localStorage.getItem('form object');
       console.log(formObject);
 
       
