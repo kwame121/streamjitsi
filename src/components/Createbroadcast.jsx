@@ -74,6 +74,12 @@ class Createbroadcast extends React.Component {
       // into the array, and set it back to local_storage and that should work
       //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
       // so change that... its not the best lol
+
+      localStorage.setItem('validated form', valid);
+      formObject = localStorage.valid;
+      console.log(formObject);
+
+      
       alert('Valid Inputss');
       this.props.onOk();
 
