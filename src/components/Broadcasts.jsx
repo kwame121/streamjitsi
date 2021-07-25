@@ -7,6 +7,8 @@ import Sidebar from "../includes/sidebar.jsx";
 import "antd/dist/antd.css";
 import { Tabs } from "antd";
 import Createbroadcast from "./Createbroadcast.jsx";
+import { Utils } from "../utils/Utils.js";
+import BroadcastCard from "./BroadcastCard.jsx";
 
 const { TabPane } = Tabs;
 
@@ -22,13 +24,19 @@ class Broadcasts extends React.Component {
     super(props);
     this.state = {
       tabValue: 0,
-      isCreateModalVisible:false,
+      isCreateModalVisible: false,
+      broadcastArray:[]
     };
     this.vanishModal = this.vanishModal.bind(this); 
   }
 
   componentDidMount() {}
 
+  componentDidMount() 
+  {
+    let broadcast_array = Utils.get_broadcasts();
+    this.setState({ ...this.state, broadcastArray: broadcast_array });
+  }
 
   setIsModalVisible()
   {
@@ -64,6 +72,17 @@ class Broadcasts extends React.Component {
                       <button className="add-destination" onClick={()=>{this.setIsModalVisible()}}>
                         Create Broadcast
                       </button>
+                      </div>
+                      
+                      <div className="all-broadcasts">
+                        {this.state.broadcastArray.map((broadcast)=>
+                        {
+                          return(
+                            <BroadcastCard broadcast={broadcast}/>
+                          )
+
+                        })}
+
                     </div>
                   </div>
                 </TabPane>

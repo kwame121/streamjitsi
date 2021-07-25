@@ -66,6 +66,7 @@ class Createbroadcast extends React.Component {
     if (!valid)
     {
       alert(error_array);
+      console.log(Utils.get_broadcasts())
     }
     else
     {
@@ -75,12 +76,20 @@ class Createbroadcast extends React.Component {
       //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
       // so change that... its not the best lol
 
-      localStorage.setItem('form object', formObject);
-      formObject = localStorage.getItem('form object');
-      console.log(formObject);
 
-      
-      alert('Valid Inputss');
+      // Convert the form object to a JSON string
+      const formObjectJson = JSON.stringify(formObject)
+
+      // Generate a random number
+      const id = Math.floor(Math.random() * 1000000) + 1
+
+      // Create a name for the object
+      let name = 'form-object-' + id
+
+      // Set the item
+      localStorage.setItem(name, formObjectJson);
+
+      alert('Valid Inputs')
       this.props.onOk();
 
     }

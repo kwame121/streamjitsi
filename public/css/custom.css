@@ -264,7 +264,7 @@ button:hover
 }
 
 
-.available-destinations
+.available-destinations, .all-broadcasts
 {
     width:50%;
     display:flex;

@@ -46,6 +46,32 @@ class Utils
     //be writing the code to insert the broadcasts into local storage...
     //
 
+    static get_broadcasts()
+    {
+        try
+        {
+            const broadcastArray = []
+            const keys = localStorage
+            if (keys.length > 0) {
+                for (let i = 0; i < keys.length; i++) {
+                    let key = localStorage.key(i)
+                    let pair = localStorage.getItem(key)
+                    let jsonPair = JSON.parse(pair)
+                    broadcastArray.push(jsonPair)
+                 }
+            }
+        
+            return broadcastArray;
+        }
+        catch(e)
+        {
+            console.error('Error has occured',e);
+            return [];
+        }
+    }
+
+
+
     static get_destinations()
     {
         try
