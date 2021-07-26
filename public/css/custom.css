@@ -306,6 +306,11 @@ button:hover
 
 }
 
+.selected-destination
+{
+    border:5px solid #6678f5;
+}
+
 
 
 

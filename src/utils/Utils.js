@@ -71,6 +71,26 @@ class Utils
         }
     }
 
+
+    static get_broadcasts() // this will be replaced with some db query in the future...
+    {
+        let broadcastArray = [];
+        try
+        {
+            if (localStorage.getItem("broadcasts")!==null)
+            {
+                broadcastArray = JSON.parse(localStorage.getItem("broadcasts"));
+            }
+            return broadcastArray;
+        }
+        catch(e)
+        {
+            console.error('Error has occured',e);
+            return [];
+        }
+
+    }
+
     static validate_email(email)
     {
         let reg_ex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

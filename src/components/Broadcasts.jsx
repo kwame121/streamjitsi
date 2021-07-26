@@ -65,6 +65,9 @@ class Broadcasts extends React.Component {
                         Create Broadcast
                       </button>
                     </div>
+                    <div className="upcoming-broadcast-main">
+                          
+                    </div>
                   </div>
                 </TabPane>
                 <TabPane tab="Past Broadcasts" key="2">

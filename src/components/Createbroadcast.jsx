@@ -18,6 +18,7 @@ class Createbroadcast extends React.Component {
     this.addFacebook = this.addFacebook.bind(this);
     this.addTwitch = this.addTwitch.bind(this);
     this.addYoutube = this.addYoutube.bind(this);
+    this.addDestination = this.addDestination.bind(this);
     this.state = {
       destinationArray: [],
       selectedDestinations: [],
@@ -58,6 +59,40 @@ class Createbroadcast extends React.Component {
     this.setState({...this.state,broadcastForm:formObject});
   }
 
+  destinationExists(destination)
+  {
+    let selectedDestinations = this.state.selectedDestinations;
+    let exists = selectedDestinations.some((element)=>
+    {
+      return element.id === destination.id;
+    });
+    return exists;
+  }
+
+  addDestination(destinationObject)
+  {
+    //check if destination exists, if so remove it, else add it...
+
+    let selectedDestinations = this.state.selectedDestinations;
+    if(!this.destinationExists(destinationObject))
+    {
+      selectedDestinations.push(destinationObject);
+      this.setState({...this.state,selectedDestinations,selectedDestinations});
+    }
+    else
+    {
+     let filteredDestination =  selectedDestinations.filter((destination)=>
+      {
+        if (destination.id !== destinationObject.id)
+        {
+          return destination;
+        }
+
+      })
+    this.setState({...this.state,selectedDestinations:filteredDestination});
+    }
+  }
+
   createBroadcast()
   {
     let formObject = this.state.broadcastForm;
@@ -69,11 +104,13 @@ class Createbroadcast extends React.Component {
     }
     else
     {
+
       //push formObject into local_storage... david do that here... so broadcasts should be an array, so just push the new validated broadcast
       //object
       // into the array, and set it back to local_storage and that should work
       //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
       // so change that... its not the best lol
+      console.log(formObject);
       alert('Valid Inputss');
       this.props.onOk();
 
@@ -118,6 +155,7 @@ class Createbroadcast extends React.Component {
             </div>
 
             {this.state.destinationArray.map((destination, index) => {
+
               let imageurl = "";
               switch (destination.destination) {
                 case "youtube":
