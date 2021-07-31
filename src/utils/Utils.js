@@ -158,18 +158,26 @@ class Utils
         let valid = true;
         for (const[key,value] of Object.entries(form_object))
         {
-            let val_function = this.get_type_callback(key);
-            let {is_valid,error} = val_function(value);
-            if (!is_valid)
+            if (key!=='start_time'&&key!=='end_time')
             {
-                error_array.push(error);
-                valid=false;
-                return{valid,error_array};
-            }
+                let val_function = this.get_type_callback(key);
+                let {is_valid,error} = val_function(value);
+                if (is_valid===false)
+                {
+                    error_array.push(error);
+                }
 
+            }
+           
         }
 
-        return {valid,error_array};
+        if (error_array.length>0)
+        {
+            return {valid:false,error_array}
+        }
+        else{
+            return {valid,error_array}
+        };
         // this is where things get complicated...
         // get the type and validate in its own special way...
     }

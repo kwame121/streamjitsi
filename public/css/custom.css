@@ -239,13 +239,14 @@ button:hover
 }
 
 .modal-input-field
-{
-    width: 100%;
-    border: 0px;
-    background: #dedede;
-    border-radius: 0.2rem;
+{    width: 100%;
+    /* border: 0px; */
+    /* background: #dedede; */
+    border-radius: 0.4rem;
     padding: 0.4rem;
-    margin-bottom:0.8rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid #bbbbbb;
+    margin-top: 0.4rem;
 }
 
 .create-event-button
@@ -312,5 +313,144 @@ button:hover
 }
 
 
+.broadcast-table
+{
+    width: 80%;
+}
+
+.broadcast-table-head{
+
+    background: #eae8e8;
+    border: 1px solid #cacaca;
+    /* padding: 10px; */
+    width: 100%;
+    border-radius: 1rem;
+
+}
+
+.broadcast-table-row
+{
+    padding:10px;
+}
+
+.broadcast-head-col
+{
+    padding:10px;
+    text-align:left;
+
+}
+
+.broadcast-title-area
+{
+    display: flex;
+    width: 100%;
+}
+.broadcast-logo
+{
+    /* background: purple; */
+    padding: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 50%;
+    /* color: white; */
+    font-weight: bold;
+    font-size: 1rem;
+    border: 2px solid black;
+
+
+}
+
+.broadcast-title-main
+{
+    margin-left: 1.5rem;
+    order: 2;
+    /* margin-top: 0.5rem; */
+    /* align-items: center; */
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    border-left: 1px solid #cacaca;
+    padding-left: 10px;
+
+}
+
+.broadcast-title
+{
+    font-weight: bold;
+    /* border-bottom: 1px solid #d8d8d8; */
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+
+}
+
+.broadcast-destination{
+
+}
+
+.destination-pill
+{
+    background: red;
+    color: white;
+    border-radius: 1rem;
+    padding: 0.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.8rem;
+    margin-right:0.8rem;
+
+}
+
+.broadcast-action-area
+{
+    width: 100%;
+    text-align: right;
+    display: flex;
+    /* flex-direction: column; */
+
+}
+
+.start-broadcast-button
+{
+    border-radius: 1rem;
+    width: 150px;
+    background: black;
+    padding: 0.3rem;
+    color: white;
+    border: 0px;
+    margin-right: 1rem;
+
+}
+
+
+.delete-broadcast-button
+{
+    border-radius: 1rem;
+    width: 150px;
+    /* background: black; */
+    padding: 0.3rem;
+    /* color: white; */
+    border: 1px solid black;
+
+}
+
+.twitch
+{
+    background-color: #6441a5!important; 
+
+}
+
+.youtube
+{
+    background-color: rgb(255, 0, 0)!important;
+
+}
+
+.MuiFormControl-root 
+{
+    width:100% !important;
+
+}
 
 

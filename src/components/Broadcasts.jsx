@@ -5,8 +5,10 @@ import Dialog from "@material-ui/core/Dialog";
 import Navbar from "../includes/navbar.jsx";
 import Sidebar from "../includes/sidebar.jsx";
 import "antd/dist/antd.css";
-import { Tabs } from "antd";
+import { Tabs, Table, Tag, Space  } from "antd";
 import Createbroadcast from "./Createbroadcast.jsx";
+import { Utils } from "../utils/Utils.js";
+import BroadcastCard from "./BroadcastCard.js";
 
 const { TabPane } = Tabs;
 
@@ -23,11 +25,15 @@ class Broadcasts extends React.Component {
     this.state = {
       tabValue: 0,
       isCreateModalVisible:false,
+      broadcasts:[],
     };
     this.vanishModal = this.vanishModal.bind(this); 
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let broadcasts = Utils.get_broadcasts();
+    this.setState({...this.state,broadcasts:broadcasts});
+  }
 
 
   setIsModalVisible()
@@ -44,6 +50,22 @@ class Broadcasts extends React.Component {
   changeTabValue(value) 
   {
     this.setState({ ...this.state, tabValue: value });
+  }
+
+  async startBroadcast(broadcast)
+  {
+    try
+    {
+      let broadcast_req = await axios.post('http://localhost:3001/youtube/get_stream_credentials',{broadcastObject:broadcast});
+      let {status,broadcast} = broadcast_req.data;
+      if (status!=='500'){
+        console.log(broadcast);
+      }
+    }
+    catch(e)
+    {
+      console.error('Error occured getting broadcast data',e);
+    }
   }
 
   render() {
@@ -66,6 +88,24 @@ class Broadcasts extends React.Component {
                       </button>
                     </div>
                     <div className="upcoming-broadcast-main">
+                      <table className="broadcast-table">
+                        <thead className="broadcast-table-head">
+                          <tr className="broadcast-table-row">
+                            <th className="broadcast-head-col">Title</th>
+                            <th className="broadcast-head-col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.broadcasts.map((broadcast)=>
+                      {
+                        return(
+                          <BroadcastCard broadcast_obj={broadcast}  />
+                        )
+                      })}
+                        </tbody>
+                      </table>
+
+                    
                           
                     </div>
                   </div>

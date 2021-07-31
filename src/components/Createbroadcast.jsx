@@ -6,6 +6,9 @@ import { Modal } from "antd";
 import MenuItems from "./MenuItems.jsx";
 import { Utils } from "../utils/Utils.js";
 import CONSTANTS from "../utils/Constants.js";
+import DestinationButton from "./DestinationButton.js";
+import Datetimepicker from "./Datetimepicker.js";
+import moment from "moment";
 
 
 
@@ -19,16 +22,22 @@ class Createbroadcast extends React.Component {
     this.addTwitch = this.addTwitch.bind(this);
     this.addYoutube = this.addYoutube.bind(this);
     this.addDestination = this.addDestination.bind(this);
+    this.changeDate = this.changeDate.bind(this);
     this.state = {
       destinationArray: [],
       selectedDestinations: [],
       broadcastForm:{
         eventName_text:'',
         jitsiUrl_url:'',
+        start_time:moment(),
+        end_time:moment(),
       },
+      broadcasts:[],
     };
 
   }
+
+
 
   addTwitch() {
     window.location.href = `https://id.twitch.tv/oauth2/authorize?response_type=token+id_token&client_id=${CONSTANTS.Twitch.clientId}&redirect_uri=http://localhost:3000/destinations/auth/twitch&scope=viewing_activity_read+openid%20user_read%20channel:read:stream_key&state=c3ab8aa609ea11e793ae92361f002671&claims={"id_token":{"email_verified":null}}`;
@@ -62,9 +71,13 @@ class Createbroadcast extends React.Component {
   destinationExists(destination)
   {
     let selectedDestinations = this.state.selectedDestinations;
-    let exists = selectedDestinations.some((element)=>
+    let exists = false;
+    exists = selectedDestinations.some((element)=>
     {
-      return element.id === destination.id;
+      if (element.id===destination.id)
+      {
+        return true;
+      }
     });
     return exists;
   }
@@ -72,25 +85,87 @@ class Createbroadcast extends React.Component {
   addDestination(destinationObject)
   {
     //check if destination exists, if so remove it, else add it...
+    try
+    {
+      
+          let selectedDestinations = this.state.selectedDestinations;
+          if(!this.destinationExists(destinationObject))
+          {
+            selectedDestinations.push(destinationObject);
+            this.setState({...this.state,selectedDestinations,selectedDestinations});
+          }
+          else
+          {
+            //removing already existing destination from array...
+          let filteredDestination =  selectedDestinations.filter((destination)=>
+            {
+              if (destination.id !== destinationObject.id)
+              {
+                return destination;
+              }
 
-    let selectedDestinations = this.state.selectedDestinations;
-    if(!this.destinationExists(destinationObject))
-    {
-      selectedDestinations.push(destinationObject);
-      this.setState({...this.state,selectedDestinations,selectedDestinations});
+            })
+          this.setState({...this.state,selectedDestinations:filteredDestination});
+         
+          }
     }
-    else
+
+    catch(e)
     {
-     let filteredDestination =  selectedDestinations.filter((destination)=>
+      console.error('Error detected',e);
+    }
+  }
+
+
+  changeDate(date,field)
+  {
+
+    let formObject = this.state.broadcastForm;
+    let moment_date = moment(date,"YYYY-MM-DD HH:mm:ss");
+    let isBefore = false;
+    try
+    {
+      if (field==='start_time')
       {
-        if (destination.id !== destinationObject.id)
+        let end_time_moment = moment(formObject.end_time,"YYYY-MM-DD HH:mm:ss");
+        console.log(moment_date);
+        isBefore = end_time_moment.isBefore(moment_date);
+        if(isBefore)
         {
-          return destination;
+          alert('Start time cannot be after end-time');
         }
+        else
+        {
+          formObject[field] = date;
+          this.setState({...this.state,broadcastForm:formObject});
+        }
+      }
+  
+      else
+      {
+        let start_time_moment = moment(formObject.start_time,"YYYY-MM-DD HH:mm:ss");
+        isBefore = moment_date.isBefore(start_time_moment);
+        if (isBefore)
+        {
+          alert('End time cannot be before start time');
+        }
+        else
+        {
+          formObject[field] = date;
+          this.setState({...this.state,formObject:formObject});
+        }
+  
+      }
 
-      })
-    this.setState({...this.state,selectedDestinations:filteredDestination});
     }
+
+    catch(e)
+    {
+      console.error(e);
+
+    }
+   
+
   }
 
   createBroadcast()
@@ -105,14 +180,39 @@ class Createbroadcast extends React.Component {
     else
     {
 
+      let destinations = this.state.selectedDestinations;
+      if (destinations.length===0)
+      {
+        alert('Must use at least one destination');
+      }
+      else
+      {
+        formObject.selectedDestinations = destinations; // adding the destinations as a new prop...
+        try
+        {
+          let broadcastArray = localStorage.getItem("broadcasts")===null?[]:JSON.parse(localStorage.getItem("broadcasts"));
+          broadcastArray.push(formObject);
+          localStorage.setItem("broadcasts",JSON.stringify(broadcastArray));
+          console.log(formObject);
+          this.props.onOk();
+          window.location.href=`http://localhost:3000/broadcasts`;
+
+        }
+        catch(e)
+        {
+          console.error('Errors detected dummy',e);
+
+        }
+      }
+
+
+
       //push formObject into local_storage... david do that here... so broadcasts should be an array, so just push the new validated broadcast
       //object
       // into the array, and set it back to local_storage and that should work
       //also, create a ui dialog to properly display the errors a user may get when filling the form wrongly, currently I use an alert,
       // so change that... its not the best lol
-      console.log(formObject);
-      alert('Valid Inputss');
-      this.props.onOk();
+
 
     }
   }
@@ -155,29 +255,33 @@ class Createbroadcast extends React.Component {
             </div>
 
             {this.state.destinationArray.map((destination, index) => {
+              return(
+                <DestinationButton destinationObject={destination} OnClick={this.addDestination} selectedDestination={this.state.selectedDestinations}  />
+              )
+              
 
-              let imageurl = "";
-              switch (destination.destination) {
-                case "youtube":
-                  imageurl = "youtube.svg";
-                  break;
-                case "twitch":
-                  imageurl = "twitch.svg";
-                  break;
-              }
-              return (
-                <div>
-                  <button
-                    className="add_broadcast_btn no-opacity"
-                    style={{ backgroundColor: "black" }}
-                  >
-                    <img
-                      src={`/images/${imageurl}`}
-                      style={{ width: "30px" }}
-                    ></img>
-                  </button>
-                </div>
-              );
+              // let imageurl = "";
+              // switch (destination.destination) {
+              //   case "youtube":
+              //     imageurl = "youtube.svg";
+              //     break;
+              //   case "twitch":
+              //     imageurl = "twitch.svg";
+              //     break;
+              // }
+              // return (
+              //   <div>
+              //     <button
+              //       className="add_broadcast_btn no-opacity"
+              //       style={{ backgroundColor: "black" }}
+              //     >
+              //       <img
+              //         src={`/images/${imageurl}`}
+              //         style={{ width: "30px" }}
+              //       ></img>
+              //     </button>
+              //   </div>
+              // );
             })}
           </div>
 
@@ -190,9 +294,16 @@ class Createbroadcast extends React.Component {
             <input type="text" className="modal-input-field" onChange={(e)=>{this.editBroadcastForm(e,'jitsiUrl_url')}}></input>
           </div>
 
+          <>
+          <Datetimepicker broadcastObject = {this.state.broadcastForm} OnChange = {this.changeDate}/>
+          </>
+         
+        
           <div className="modal-input-row">
             <button className="create-event-button" onClick={()=>{this.createBroadcast()}}>Create Event</button>
           </div>
+
+        
 
         </div>
 
