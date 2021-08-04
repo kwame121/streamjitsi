@@ -28,6 +28,7 @@ class Broadcasts extends React.Component {
       broadcasts:[],
     };
     this.vanishModal = this.vanishModal.bind(this); 
+    this.startBroadcast = this.startBroadcast.bind(this);
   }
 
   componentDidMount() {
@@ -52,11 +53,11 @@ class Broadcasts extends React.Component {
     this.setState({ ...this.state, tabValue: value });
   }
 
-  async startBroadcast(broadcast)
+  async startBroadcast(broadcast_obj)
   {
     try
     {
-      let broadcast_req = await axios.post('http://localhost:3001/youtube/get_stream_credentials',{broadcastObject:broadcast});
+      let broadcast_req = await axios.post('http://localhost:3001/youtube/get_stream_credentials',{broadcastObject:broadcast_obj});
       let {status,broadcast} = broadcast_req.data;
       if (status!=='500'){
         console.log(broadcast);
@@ -99,7 +100,7 @@ class Broadcasts extends React.Component {
                         {this.state.broadcasts.map((broadcast)=>
                       {
                         return(
-                          <BroadcastCard broadcast_obj={broadcast}  />
+                          <BroadcastCard broadcast_obj={broadcast} OnClick={this.startBroadcast}  />
                         )
                       })}
                         </tbody>

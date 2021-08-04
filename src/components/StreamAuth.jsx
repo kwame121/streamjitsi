@@ -26,22 +26,14 @@ class StreamAuth extends React.Component {
     switch(destination)
     {
       case "twitch":
-        StreamFunctions.streamTwitch(url).then((result)=>
-        {
-          localStorage.setItem('twitch_userData',JSON.stringify(result[1]));
-          localStorage.setItem('twitch_streamData',JSON.stringify(result[0]));  
-        }).catch((error)=>
-        {
-          console.log('an error occured', error);
-
-        });
+        StreamFunctions.auth_twitch(url);
         break;
       
       case "facebook":
         break;
       
       case "youtube":
-        StreamFunctions.streamYoutube(url);
+        StreamFunctions.auth_youtube(url);
         break;
 
     }

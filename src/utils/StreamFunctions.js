@@ -26,42 +26,47 @@ function validateYoutube(youtubeObject) {
   });
 }
 
-function validateFacebook() {}
 
 
+export async function start_streaming(broadcast,twitchObject)
+{
+  try
+  {
+    let destinations = broadcast.selectedDestinations;
+    let promise_array = [];
+    destinations.map((destination)=>{
+      if (destination.destination==='youtube')
+      {
+        //trigger some kind of flow here....
+        let youtube_promise = axios.post('http://localhost:3001/youtube/get_stream_credentials',{broadcastObject:broadcast});
+        promise_array.push(youtube_promise);
+      }
+      else if (destination.destination==='twitch')
+      {
+        let twitch_promise = axios.post('http://localhost:3001/twitch/stream_twitch',{twitchObject:twitchObject});
+        promise_array.push(twitch_promise);
+        //trigger some kind of flow here..
+  
+      }
+    });
+    
+    let stream_result = await axios.all(promise_array);
+    console.log(stream_result.data);
 
-export function streamTwitch(url) {
-  let hash = url.hash;
-  let twitchObject = {};
-  let params = hash.split("&");
-  for (
-    let i = 0;
-    i < params.length;
-    i++ // getting all the needed params and putting them into an object quickly...
-  ) {
-    let [name, value] = params[i].split("=");
-    name = name.replace("#", "");
-    twitchObject[name] = value;
+    
+  }
+  catch(e)
+  {
+    console.error('error starting stream',e);
+    return Promise.reject(e);
   }
 
-  return new Promise((resolve, reject) => {
-    axios
-      .post("http://localhost:3001/twitch/stream_twitch", { twitchObject })
-      .then((result) => {
-        let data = result.data;
-        let streamData = data["stream_data"].data[0];
-        let userData = data["user_data"];
-        resolve([streamData, userData]);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+
 }
 
-export function streamFacebook(url) {}
 
-export async function streamYoutube(url) {
+
+export async function auth_youtube(url) {
   let query = url.search;
   let params = query.split("&");
   let authData = {};
@@ -109,67 +114,43 @@ export async function streamYoutube(url) {
   }
 }
 
-// export function streamYoutube(url)
-// {
 
-//   let query = url.search;
-//   let params = query.split('&');
-//   let youtubeObject = {};
-//   for (let i = 0; i<params.length; i++) // getting all the needed params and putting them into an object quickly...
-//   {
-//    let [name,value] = params[i].split("=");
-//    name = name.replace(/[&?#]/g,'');
-//    youtubeObject[name] = value;
-//   }
+export function auth_twitch(url) {
 
-//   let sessionToken = localStorage.getItem('session_token');
-//   if (sessionToken != youtubeObject['state'])
-//   {
-//     console.log('error, invalid authentication...');
-//   }
-//   else
-//   {
-//     console.log(youtubeObject);
-//     let postObject = {
-//       code:youtubeObject['code'],
-//       client_id:CONSTANTS.Youtube.clientId,
-//       redirect_uri:'http%3A%2F%2Flocalhost%3A3000%2Fdestinations%2Fauth%2Fyoutube',
-//       grant_type:'authorization_code',
-//     }
+  try
+  {
+    let hash = url.hash;
+    let twitchObject = {};
+    let params = hash.split("&");
+    for (
+      let i = 0;
+      i < params.length;
+      i++ // getting all the needed params and putting them into an object quickly...
+    ) {
+      let [name, value] = params[i].split("=");
+      name = name.replace("#", "");
+      twitchObject[name] = value;
+    }
+  
+    let request = axios.post(`http://localhost:3001/twitch/get_user`,{twitchObject});
+    let {data} = request;
+    console.log(data);
 
-//     axios.post('http://localhost:3001/youtube/get_auth_details',{postObject})
-//     .then((result)=>{
-//       console.log(result.data);
-//     })
-//     .catch((error)=>{
-//       console.log(error);
-//     })
+    // //do the local storage stuff here...
+    // window.location.href= 'http://localhost:3000/broadcasts';  
+  }
 
-//   }
+  catch(e)
+  {
+    console.error(e);
+  }
+ 
+}
 
-// return new Promise((resolve,reject)=>
-// {
-//   validateYoutube(youtubeObject).then((result)=>
-//   {
-//     //happen here?
 
-//     console.log(result);
-//     if (result)
-//     {
-//       resolve({status:true,youtubeObject:youtubeObject});
-//     }
+export function streamFacebook(url) {}
 
-//     else
-//     {
-//       resolve({status:false,youtubeObject:{}});
-//     }
 
-//   }).catch((error)=>
-//   {
-//     reject(error);
 
-//   })
 
-// })
-
-export default { streamTwitch, streamFacebook, streamYoutube };
+export default { auth_twitch,auth_youtube,start_streaming };

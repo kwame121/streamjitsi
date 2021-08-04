@@ -35,7 +35,7 @@ export default function BroadcastCard(props) {
     </td>
     <td>
         <div className="broadcast-action-area">
-            <button className="start-broadcast-button">Start Broadcast</button>
+            <button className="start-broadcast-button" onClick={()=>{props.OnClick(props.broadcast_obj)}}>Start Broadcast</button>
             <button className="delete-broadcast-button">Delete Broadcast</button>
         </div>
 
